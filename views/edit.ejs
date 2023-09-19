@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Task</title>
+</head>
+<body>
+    <h1>Edit Task</h1>
+    <form action="/edit/<%= task._id %>" method="POST">
+        <input type="text" name="name" value="<%= task.name %>">
+        <button type="submit">Update</button>
+    </form>
+    <a href="/">Back to Tasks</a>
+</body>
+</html>
