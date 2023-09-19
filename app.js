@@ -1,27 +1,34 @@
-// npm init -y
-// npm i express ejs body-parser nodemon --save
-
-// Step 1: Import Required Modules : express, ejs, body-parser, nodemon
-// ejs and nodemon are embedded (no need for 'require')
 const express = require('express');
-const bodyParser = require('body-parser');
-const port = 3001;
+const mongoose = require('mongoose');
+const ejs = require('ejs');
+const Task = require('./models/task'); 
+/* const bodyParser = require('body-parser'); */
 
-// Step 2: Create the Express Application 
+const port = process.env.PORT || 3000;
 const app = express();
 
-// Step 3: Setting the view engine
+// Connect to MongoDB
+mongoose.connect('mongodb+srv://dchiquete2019:97Ap4KcvLRfmz6Hs@cluster0.nr0zix5.mongodb.net/TaskApp')
+    .then(() => {
+        console.log('Connected to MongoDB');
+    })
+    .catch(err => {
+        console.log('Error connecting to MongoDB:', err);
+    });
+
+// Set EJS as the view engine
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
-// Step 4: Configuring the body parsing
-app.use(bodyParser.urlencoded({extended: false}));
+// Middleware
+
+
+/* app.use(bodyParser.urlencoded({extended: false})); */
 
 app.use(express.static('./public/style.css'));
 
-let tasks = [];
+let tasks = [];         
 
-// Step 5: Serve the static files
 app.get('/', (req, res) => {
     res.render('index', { tasks });
 });
@@ -55,6 +62,7 @@ app.post('/edit/:id', (req, res) => {
 
 }) */
 
+// Start the server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
