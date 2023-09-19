@@ -29,33 +29,30 @@ app.get('/', async (req, res) => {
     res.render('index', {tasks});
 });
 
+// Add Task route 
 app.post('/add', async (req, res) => {
     const task = new Task({name: req.body.task});
     await task.save();
     res.redirect('/'); 
 });
 
-/* app.get('/edit/:id', (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const task = tasks.find((task) => task.id === taskId);
-    res.render('edit', { task });
+// Edit task form route
+app.get('/edit/:id', async (req, res) => {
+    const task = await Task.findById(req.params.id);
+    res.render('edit', {task});
 });
 
-app.post('/edit/:id', (req, res) => {
-    const taskId = parseInt(req.params.id);
-    const updatedText = req.body.task;
-    const task = tasks.find((task) => task.id === taskId);
-    if (task) {
-        task.text = updatedText;
-    }
+// Update task route
+app.post('/edit/:id', async (req, res) => {
+    const {name} = req.body;
+    await Task.findByIdAndUpdate(req.params.id, {name});
     res.redirect('/');
-});  */
+});
 
-/* app.get('/delete/:id', (req, res) => {
-    const taskId = parseInt(req.params.id);
-    tasks = tasks.filter(task => task.id === taskId);
-
-}) */
+app.post('/delete/:id', async (req, res) => {
+    await Task.findByIdAndDelete(req.params.id);
+    res.redirect('/');
+});
 
 // Start the server
 app.listen(port, () => {
