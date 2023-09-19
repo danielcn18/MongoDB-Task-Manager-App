@@ -21,30 +21,25 @@ app.set('views', './views');
 app.set('view engine', 'ejs');
 
 // Middleware
+app.use(express.urlencoded({extended: true}));
 
-
-/* app.use(bodyParser.urlencoded({extended: false})); */
-
-app.use(express.static('./public/style.css'));
-
-let tasks = [];         
-
-app.get('/', (req, res) => {
-    res.render('index', { tasks });
+// Routes
+app.get('/', async (req, res) => {
+    const tasks = await Task.find();
+    res.render('index', {tasks});
 });
 
-app.post('/addTask', (req, res) => {
-    const newTask = req.body.task;
-    tasks.push({ id: Date.now(), text: newTask });
-    console.log(tasks);
-    res.redirect('/');
+app.post('/add', async (req, res) => {
+    const task = new Task({name: req.body.task});
+    await task.save();
+    res.redirect('/'); 
 });
 
-app.get('/edit/:id', (req, res) => {
+/* app.get('/edit/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
     const task = tasks.find((task) => task.id === taskId);
     res.render('edit', { task });
-})
+});
 
 app.post('/edit/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
@@ -54,7 +49,7 @@ app.post('/edit/:id', (req, res) => {
         task.text = updatedText;
     }
     res.redirect('/');
-})
+});  */
 
 /* app.get('/delete/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
